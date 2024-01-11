@@ -23,8 +23,8 @@ void redim_img()
     unsigned int iter1 = 0, iter2 = 0;
     unsigned short norm_x = 0;
     unsigned int norm_y = 0;
-    
-    if(ancho_in <= ancho_fin)
+
+    if (ancho_in <= ancho_fin)
     {
         ancho_min = ancho_in;
     }
@@ -32,8 +32,8 @@ void redim_img()
     {
         ancho_min = ancho_fin;
     }
-    
-    if(alto_in <= alto_fin)
+
+    if (alto_in <= alto_fin)
     {
         alto_min = alto_in;
     }
@@ -41,63 +41,75 @@ void redim_img()
     {
         alto_min = alto_fin;
     }
-    
+
     for (unsigned short filas_y = 0; filas_y < alto_min; filas_y++)
     {
         for (unsigned short columnas_x = 0; columnas_x < ancho_min; columnas_x++)
         {
-            if(ancho_fin >= ancho_in)
+            if (ancho_fin >= ancho_in)
             {
                 norm_x = columnas_x * (float(ancho_fin) / (ancho_in - 1));
+
+                if (norm_x == ancho_fin)
+                {
+                    norm_x = ancho_fin - 1;
+                }
             }
             else
             {
                 norm_x = columnas_x * (float(ancho_in) / (ancho_fin - 1));
-            }
-            
-            if (norm_x == ancho_fin)
-            {
-                norm_x = ancho_fin - 1;
+
+                if (norm_x == ancho_in)
+                {
+                    norm_x = ancho_in - 1;
+                }
             }
 
             norm_x *= 3;
-            
-            if(alto_fin >= alto_in)
+
+            if (alto_fin >= alto_in)
             {
                 norm_y = filas_y * (float(alto_fin) / (alto_in - 1));
+
+                if (norm_y == alto_fin)
+                {
+                    norm_y = alto_fin - 1;
+                }
+
+                norm_y *= ancho_fin * 3;
             }
             else
             {
                 norm_y = filas_y * (float(alto_in) / (alto_fin - 1));
+
+                if (norm_y == alto_in)
+                {
+                    norm_y = alto_in - 1;
+                }
+
+                norm_y *= ancho_in * 3;
             }
 
-            if (norm_y == alto_fin)
-            {
-                norm_y = alto_fin - 1;
-            }
-
-            norm_y *= ancho_fin * 3;
-            
             for (unsigned short cont_rgb = 0; cont_rgb < 3; cont_rgb++)
             {
-                if(ancho_fin >= ancho_in && alto_fin >= alto_in)
+                if (ancho_fin >= ancho_in && alto_fin >= alto_in)
                 {
                     rgb_salida[norm_y + norm_x + cont_rgb] = static_cast<unsigned char>(rgb_entrada[(filas_y * ancho_in * 3) + (columnas_x * 3) + cont_rgb]);
                 }
-                
-                if(ancho_fin <= ancho_in && alto_fin < alto_in || ancho_fin < ancho_in && alto_fin <= alto_in)
+
+                if (ancho_fin <= ancho_in && alto_fin < alto_in || ancho_fin < ancho_in && alto_fin <= alto_in)
                 {
-                    rgb_salida[(filas_y * ancho_in * 3) + (columnas_x * 3) + cont_rgb] = static_cast<unsigned char>(rgb_entrada[norm_y + norm_x + cont_rgb]);
+                    rgb_salida[(filas_y * ancho_fin * 3) + (columnas_x * 3) + cont_rgb] = static_cast<unsigned char>(rgb_entrada[norm_y + norm_x + cont_rgb]);
                 }
-                
-                if(ancho_fin > ancho_in && alto_fin < alto_in)
+
+                if (ancho_fin > ancho_in && alto_fin < alto_in)
                 {
                     rgb_salida[(filas_y * ancho_fin * 3) + norm_x + cont_rgb] = static_cast<unsigned char>(rgb_entrada[norm_y + (columnas_x * 3) + cont_rgb]);
                 }
-                
-                if(ancho_fin < ancho_in && alto_fin > alto_in)
+
+                if (ancho_fin < ancho_in && alto_fin > alto_in)
                 {
-                    rgb_salida[norm_y + (columnas_x * 3) + cont_rgb] = static_cast<unsigned char>(rgb_entrada[(filas_y * ancho_fin * 3) + norm_x + cont_rgb]);
+                    rgb_salida[norm_y + (columnas_x * 3) + cont_rgb] = static_cast<unsigned char>(rgb_entrada[(filas_y * ancho_in * 3) + norm_x + cont_rgb]);
                 }
             }
         }
@@ -123,8 +135,8 @@ void redim_img()
                             for (unsigned short iter_esp = 0; iter_esp < (iter2 / 3) - (iter1 / 3) - 1; iter_esp++)
                             {
                                 float frac = (1 + iter_esp) * (1.0f / ((iter2 / 3) - (iter1 / 3)));
-                                
-                                rgb_salida[iter1 + 3 + (iter_esp * 3) + cont_rgb] = (rgb_salida[iter1 + cont_rgb].value()*(2*std::pow(frac,3)-3*std::pow(frac,2)+1))+(rgb_salida[iter2 + cont_rgb].value()*(-2*std::pow(frac,3)+3*std::pow(frac,2)));
+
+                                rgb_salida[iter1 + 3 + (iter_esp * 3) + cont_rgb] = (rgb_salida[iter1 + cont_rgb].value() * (2 * std::pow(frac, 3) - 3 * std::pow(frac, 2) + 1)) + (rgb_salida[iter2 + cont_rgb].value() * (-2 * std::pow(frac, 3) + 3 * std::pow(frac, 2)));
                             }
                         }
 
@@ -166,11 +178,11 @@ void redim_img()
                             for (unsigned short iter_esp = 0; iter_esp < (iter2 / ancho_fin / 3) - (iter1 / ancho_fin / 3) - 1; iter_esp++)
                             {
                                 float frac = (1 + iter_esp) * (1.0f / ((iter2 / ancho_fin / 3) - (iter1 / ancho_fin / 3)));
-                                
-                                rgb_salida[iter1 + (ancho_fin * 3) + (iter_esp * (ancho_fin * 3)) + cont_rgb] = (rgb_salida[iter1 + cont_rgb].value()*(2*std::pow(frac,3)-3*std::pow(frac,2)+1))+(rgb_salida[iter2 + cont_rgb].value()*(-2*std::pow(frac,3)+3*std::pow(frac,2)));
+
+                                rgb_salida[iter1 + (ancho_fin * 3) + (iter_esp * (ancho_fin * 3)) + cont_rgb] = (rgb_salida[iter1 + cont_rgb].value() * (2 * std::pow(frac, 3) - 3 * std::pow(frac, 2) + 1)) + (rgb_salida[iter2 + cont_rgb].value() * (-2 * std::pow(frac, 3) + 3 * std::pow(frac, 2)));
                             }
                         }
-                        
+
                         iter1 = iter2;
                         iter2 += ancho_fin * 3;
                     }
@@ -201,7 +213,7 @@ int main()
     GetUserName(w_usr, &tam_w_usr);
     std::string n_usr(w_usr, w_usr + tam_w_usr);
     n_usr.pop_back();
-    
+
     enc_bmp[18] = static_cast<unsigned char>(ancho_fin - (unsigned char(ancho_fin / 256) * 256));
     enc_bmp[19] = static_cast<unsigned char>(ancho_fin / 256);
     enc_bmp[22] = static_cast<unsigned char>(alto_fin - (unsigned char(alto_fin / 256) * 256));
