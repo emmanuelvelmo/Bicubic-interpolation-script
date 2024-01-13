@@ -2,7 +2,6 @@
   <strong>Output Image</strong>
   <br/>
   <img src="https://github.com/emmanuelvelmo/Bicubic-interpolation-script/assets/51292782/22a68814-e946-471f-b4c9-ad5280b000ca"/>
-
 </p>
 
 <p align="left">
